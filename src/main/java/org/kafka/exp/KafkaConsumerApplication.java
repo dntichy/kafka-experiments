@@ -1,5 +1,6 @@
 package org.kafka.exp;
 
+import io.smallrye.reactive.messaging.annotations.Blocking;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.kafka.exp.model.Order;
@@ -24,6 +25,7 @@ public class KafkaConsumerApplication {
   }
 
   @Incoming("orders")
+  @Blocking(ordered = true)
   public void consumeOrders(ConsumerRecord<String, Order> message) {
     if (message.value() == null) {
       logger.info("Deserialization error " + message.value());

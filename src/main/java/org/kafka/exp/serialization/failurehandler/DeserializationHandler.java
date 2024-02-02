@@ -1,6 +1,5 @@
 package org.kafka.exp.serialization.failurehandler;
 
-import io.smallrye.mutiny.Uni;
 import io.smallrye.reactive.messaging.kafka.DeserializationFailureHandler;
 import jakarta.inject.Inject;
 import org.apache.kafka.common.header.Headers;
@@ -9,14 +8,13 @@ public class DeserializationHandler<T> implements DeserializationFailureHandler<
   @Inject GenericDeserializationHandler genericDeserializationHandler;
 
   @Override
-  public T decorateDeserialization(
-      Uni<T> deserialization,
+  public T handleDeserializationFailure(
       String topic,
       boolean isKey,
       String deserializer,
       byte[] data,
+      Exception exception,
       Headers headers) {
-    return genericDeserializationHandler.handle(
-        deserialization, topic, isKey, deserializer, data, headers);
+    return genericDeserializationHandler.handle(data, headers);
   }
 }
